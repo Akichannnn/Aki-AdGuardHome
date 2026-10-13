@@ -2,7 +2,7 @@ bind_host: 0.0.0.0
 bind_port: 3000
 users:
   - name: aki
-    password:"$2a$12$al6dZA3q0.1pwq055kFnnea/SQhMmvn2gErDmRmMkE22OjquRhf/2"
+    password:"$2a$10$fwNbXwC6SajzwEQyePyKfOCMRqKQLzFcitV3t7IfIbZ5sPBoa9qA."
 dns:
   bind_hosts:
     - 0.0.0.0
