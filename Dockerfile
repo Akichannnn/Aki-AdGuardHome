@@ -1,15 +1,16 @@
 FROM adguard/adguardhome:latest
 
-# Sao chép file cấu hình chuẩn vào vị trí ứng dụng
-COPY AdGuardHome.yaml /opt/adguardhome/AdGuardHome.yaml
+# Tạo thư mục làm việc chuyên dụng trong phân vùng an toàn và cấp quyền sở hữu cho user nobody
+RUN mkdir -p /home/adguardhome/work && chown -R nobody:nogroup /home/adguardhome
 
-# Ép hệ thống tạo sẵn thư mục làm việc /tmp/work
-RUN mkdir -p /tmp/work
+# Sao chép file cấu hình chuẩn vào thư mục an toàn vừa tạo
+COPY AdGuardHome.yaml /home/adguardhome/AdGuardHome.yaml
+RUN chown nobody:nogroup /home/adguardhome/AdGuardHome.yaml
 
-# Chuyển quyền chạy sang user thường để vượt qua lớp bảo mật Admin của Railway
+# Hạ quyền chạy sang user thường để vượt qua lớp bảo mật Admin của Railway
 USER nobody
 
-# Thực thi ứng dụng với cấu hình và thư mục làm việc đã được chuẩn bị sẵn
-ENTRYPOINT ["/opt/adguardhome/AdGuardHome", "-w", "/tmp/work", "-c", "/opt/adguardhome/AdGuardHome.yaml", "--no-check-update"]
+# Thực thi ứng dụng trỏ toàn bộ dữ liệu ghi và đọc vào phân vùng an toàn /home
+ENTRYPOINT ["/opt/adguardhome/AdGuardHome", "-w", "/home/adguardhome/work", "-c", "/home/adguardhome/AdGuardHome.yaml", "--no-check-update"]
 
 EXPOSE 3000
